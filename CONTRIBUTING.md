@@ -63,7 +63,7 @@ working on.)
 Copy that to `MaxPackage/beat-link-max/java-classes/lib/beat-link-max.jar`,
 and then copy `MaxPackage/beat-link-max`, which is the Max package, to the Max
 Packages folder as described in the Installation section of the
-[Read Me](#README.md#Installation).
+[Read Me](README.md#Installation).
 
 > :bulb: You can also create an alias of the
 > `MaxPackage/beat-link-max` folder inside your Max Packages folder to
@@ -87,7 +87,9 @@ for us.
 ## Giving back
 
 Once you have something working you’d like to share, you can open a
-[pull request][pulls].
+[pull request][pulls]. It’d probably be a good idea before you get
+to that point to get some feedback on what you’ve been doing through
+the [Beat Link Trigger Zulip channel](https://deep-symmetry.zulipchat.com/#narrow/stream/275322-beat-link-trigger).
 
 Or if you simply have an idea, or something that you wish worked
 differently, feel free to discuss it on the [Beat Link Trigger Zulip
@@ -104,7 +106,7 @@ Beat Link is primarily maintained by [@brunchboy][brunchboy].
 <a href="https://deepsymmetry.org"><img align="right" alt="Deep Symmetry"
  src="assets/DS-logo-github.png" width="250" height="150"></a>
 
-Copyright © 2016–2023 [Deep Symmetry, LLC](http://deepsymmetry.org)
+Copyright © 2024 [Deep Symmetry, LLC](http://deepsymmetry.org)
 
 Distributed under the [Eclipse Public License
 2.0](https://opensource.org/licenses/EPL-2.0). By using this software

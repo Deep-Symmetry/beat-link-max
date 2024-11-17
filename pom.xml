@@ -81,12 +81,10 @@
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
             <version>${slf4jVersion}</version>
-        </dependency>
-        <dependency>
+        </dependency>        <dependency>
             <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
+            <artifactId>slf4j-jdk14</artifactId>
             <version>${slf4jVersion}</version>
-            <scope>test</scope>
         </dependency>
         <dependency>
             <groupId>org.apiguardian</groupId>
@@ -277,41 +275,42 @@
                 </executions>
             </plugin>
 
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-javadoc-plugin</artifactId>
-                <configuration>
-                    <release>11</release>
-                    <links>
-                      <link>http://deepsymmetry.org/electro/apidocs/</link>
-                      <link>http://deepsymmetry.org/cratedigger/apidocs/</link>
-                    </links>
-                    <additionalOptions>-html5</additionalOptions>
-                    <additionalJOption>--no-module-directories</additionalJOption>
-                    <additionalJOption>--allow-script-in-comments</additionalJOption>
-                     <header>
-                       <![CDATA[
-                                <!-- Google tag (gtag.js) -->
-                                <script async src="https://www.googletagmanager.com/gtag/js?id=G-RF9JED08L1"></script>
-                                <script>
-                                window.dataLayer = window.dataLayer || [];
-                                function gtag(){dataLayer.push(arguments);}
-                                gtag('js', new Date());
+<!--            <plugin>-->
+<!--                <groupId>org.apache.maven.plugins</groupId>-->
+<!--                <artifactId>maven-javadoc-plugin</artifactId>-->
+<!--                <configuration>-->
+<!--                    <release>11</release>-->
+<!--                    <links>-->
+<!--                      <link>https://deepsymmetry.org/beatlink/apidocs/</link>-->
+<!--                      <link>https://deepsymmetry.org/electro/apidocs/</link>-->
+<!--                      <link>https://deepsymmetry.org/cratedigger/apidocs/</link>-->
+<!--                    </links>-->
+<!--                    <additionalOptions>-html5</additionalOptions>-->
+<!--                    <additionalJOption>&#45;&#45;no-module-directories</additionalJOption>-->
+<!--                    <additionalJOption>&#45;&#45;allow-script-in-comments</additionalJOption>-->
+<!--                     <header>-->
+<!--                       <![CDATA[-->
+<!--                                &lt;!&ndash; Google tag (gtag.js) &ndash;&gt;-->
+<!--                                <script async src="https://www.googletagmanager.com/gtag/js?id=G-RF9JED08L1"></script>-->
+<!--                                <script>-->
+<!--                                window.dataLayer = window.dataLayer || [];-->
+<!--                                function gtag(){dataLayer.push(arguments);}-->
+<!--                                gtag('js', new Date());-->
 
-                                gtag('config', 'G-RF9JED08L1');
-                                </script>
-                       ]]>
-                     </header>
-                </configuration>
-                <executions>
-                    <execution>
-                        <id>attach-javadocs</id>
-                        <goals>
-                            <goal>jar</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+<!--                                gtag('config', 'G-RF9JED08L1');-->
+<!--                                </script>-->
+<!--                       ]]>-->
+<!--                     </header>-->
+<!--                </configuration>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>attach-javadocs</id>-->
+<!--                        <goals>-->
+<!--                            <goal>jar</goal>-->
+<!--                        </goals>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
 
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

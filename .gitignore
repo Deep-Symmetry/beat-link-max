@@ -6,6 +6,7 @@ pom.xml.next
 release.properties
 dependency-reduced-pom.xml
 buildNumber.properties
+MaxPackage/beat-link-max/logs/*
 MaxPackage/beat-link-max/java-classes/lib/beat-link-max.jar
 .mvn/timing.properties
 .idea/

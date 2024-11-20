@@ -34,8 +34,6 @@ public class Util {
             try {
                 final File ourJar = new File(Util.class.getProtectionDomain().getCodeSource().getLocation().toURI());
                 final File ourPackage = ourJar.getParentFile().getParentFile().getParentFile();
-                MaxObject.post("beat-link-max found in " + ourPackage.getCanonicalPath());
-
                 // Make sure the logs folder exists
                 final File logFolder = new File(ourPackage, "logs");
                 if (!logFolder.exists()) {
@@ -55,6 +53,7 @@ public class Util {
                 }
 
                 // Set the logging configuration
+                MaxObject.post("beat-link-max logs found in " + logFolder.getCanonicalPath());
                 final String config = baseConfig + "java.util.logging.FileHandler.pattern = " + logFolder.getCanonicalPath() +
                         "/beat-link-max-%g.log";
                 LogManager.getLogManager().readConfiguration(new ByteArrayInputStream(config.getBytes(StandardCharsets.UTF_8)));

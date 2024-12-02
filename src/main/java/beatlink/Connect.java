@@ -15,7 +15,7 @@ import org.slf4j.LoggerFactory;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
- * Created by James Elliott on 11/10/24.
+ * An MXJ object that provides a mechanism to establish or break the connection to the Pro DJ Link network.
  */
 @API(status = API.Status.EXPERIMENTAL)
 public class Connect extends MaxObject {
@@ -29,7 +29,58 @@ public class Connect extends MaxObject {
     private static final AtomicReference<String> state = new AtomicReference<>("stopped");
 
     /**
-     * Constructor sets up and describes the inlets and outlets.
+     * Allows us to notice when the {@link DeviceFinder} shuts down, so we can mark ourselves as offline.
+     */
+    private final LifecycleListener deviceFinderLifecycleListener = new LifecycleListener() {
+        @Override
+        public void started(LifecycleParticipant sender) {
+            // Nothing to do here.
+        }
+
+        @Override
+        public void stopped(LifecycleParticipant sender) {
+            state.set("stopped");
+            outlet(0, "stopped");
+        }
+    };
+
+    /**
+     * Allows us to notice when the TimeFinder finishes startup, so we can mark ourselves as online.
+     */
+    private final LifecycleListener timeFinderLifecycleListener = new LifecycleListener() {
+        @Override
+        public void started(LifecycleParticipant sender) {
+            state.set("started");
+            outlet(0, "started");
+        }
+
+        @Override
+        public void stopped(LifecycleParticipant sender) {
+            // Nothing to do here.
+        }
+    };
+
+    /**
+     * Allows us to report on the coming and going of Pro DJ Link devices.
+     */
+    private final DeviceAnnouncementListener deviceListener = new DeviceAnnouncementListener() {
+        @Override
+        public void deviceFound(DeviceAnnouncement announcement) {
+            outlet(1, "found",
+                    new Atom[]{Atom.newAtom(announcement.getDeviceName()),
+                            Atom.newAtom(announcement.getDeviceNumber())});
+        }
+
+        @Override
+        public void deviceLost(DeviceAnnouncement announcement) {
+            outlet(1, "lost",
+                    new Atom[]{Atom.newAtom(announcement.getDeviceName()),
+                            Atom.newAtom(announcement.getDeviceNumber())});
+        }
+    };
+
+    /**
+     * Constructor sets up and describes the inlets and outlets, and registers our listeners.
      */
     public Connect() {
         Util.initializeLogging();
@@ -38,47 +89,25 @@ public class Connect extends MaxObject {
         declareOutlets(new int[]{DataTypes.ALL, DataTypes.ALL});
         setOutletAssist(new String[]{"reports status changes", "reports devices found/lost"});
 
-        DeviceFinder.getInstance().addLifecycleListener(new LifecycleListener() {
-            @Override
-            public void started(LifecycleParticipant sender) {
-                // Nothing to do here.
-            }
+        DeviceFinder.getInstance().addLifecycleListener(deviceFinderLifecycleListener);
+        TimeFinder.getInstance().addLifecycleListener(timeFinderLifecycleListener);
+        DeviceFinder.getInstance().addDeviceAnnouncementListener(deviceListener);
+    }
 
-            @Override
-            public void stopped(LifecycleParticipant sender) {
-                state.set("stopped");
-                outlet(0, "stopped");
-            }
-        });
+    @Override
+    protected void loadbang() {
+        super.loadbang();
 
-        TimeFinder.getInstance().addLifecycleListener(new LifecycleListener() {
-            @Override
-            public void started(LifecycleParticipant sender) {
-                state.set("started");
-                outlet(0, "started");
-            }
+        // Report on the current connection state.
+        outlet(0, state.get());
+    }
 
-            @Override
-            public void stopped(LifecycleParticipant sender) {
-                // Nothing to do here.
-            }
-        });
-
-        DeviceFinder.getInstance().addDeviceAnnouncementListener(new DeviceAnnouncementListener() {
-            @Override
-            public void deviceFound(DeviceAnnouncement announcement) {
-                outlet(1, "found",
-                        new Atom[]{Atom.newAtom(announcement.getDeviceName()),
-                                Atom.newAtom(announcement.getDeviceNumber())});
-            }
-
-            @Override
-            public void deviceLost(DeviceAnnouncement announcement) {
-                outlet(1, "lost",
-                        new Atom[]{Atom.newAtom(announcement.getDeviceName()),
-                                Atom.newAtom(announcement.getDeviceNumber())});
-            }
-        });
+    @Override
+    protected void notifyDeleted() {
+        DeviceFinder.getInstance().removeLifecycleListener(deviceFinderLifecycleListener);
+        TimeFinder.getInstance().removeLifecycleListener(timeFinderLifecycleListener);
+        DeviceFinder.getInstance().removeDeviceAnnouncementListener(deviceListener);
+        super.notifyDeleted();
     }
 
     /**
@@ -117,7 +146,6 @@ public class Connect extends MaxObject {
         } else {
             MaxObject.error("Can only start if current state is stopped");
         }
-
     }
 
     /**
@@ -125,7 +153,10 @@ public class Connect extends MaxObject {
      */
     private void goOffline() {
         if (state.compareAndSet("started", "stopping")) {
+            outlet(0, "stopping");
             DeviceFinder.getInstance().stop();
+        } else {
+            MaxObject.error("Can only stop if current state is started");
         }
     }
 

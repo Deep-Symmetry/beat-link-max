@@ -67,7 +67,7 @@ public class Tempo extends MaxObject {
     @SuppressWarnings("unused")
     private void setPlayer(int n) {
         if (n < 0 || n > 6) {
-            MaxObject.error("Tempo player attribute must be in range 0-6");
+            MaxObject.error("Tempo object's player attribute must be in range 0-6");
             return;
         }
         if (player != n) {
@@ -155,6 +155,11 @@ public class Tempo extends MaxObject {
         super.loadbang();
         loaded = true;
         reportMasterTempoIfNeeded();
+    }
+
+    @Override
+    protected void bang() {
+        reportTempo();
     }
 
     @Override

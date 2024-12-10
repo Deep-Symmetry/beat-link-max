@@ -4,10 +4,7 @@ import com.cycling74.max.Atom;
 import com.cycling74.max.DataTypes;
 import com.cycling74.max.MaxObject;
 import org.apiguardian.api.API;
-import org.deepsymmetry.beatlink.data.TimeFinder;
-import org.deepsymmetry.beatlink.data.TrackPositionUpdate;
-import org.deepsymmetry.beatlink.data.WaveformDetail;
-import org.deepsymmetry.beatlink.data.WaveformFinder;
+import org.deepsymmetry.beatlink.data.*;
 
 /**
  * An MXJ object that allows you to track playback position for a particular player.
@@ -98,6 +95,28 @@ public class Position extends MaxObject {
     }
 
     /**
+     * Used to send updates when movement is reported by Beat Link.
+     */
+    private final TrackPositionListener trackPositionListener = this::reportPosition;
+
+    /**
+     * Used to send updates when we gain information about the track length from its waveform.
+     */
+    private final WaveformListener waveformListener = new WaveformListener() {
+        @Override
+        public void previewChanged(WaveformPreviewUpdate update) {
+            // Nothing to do here, we only care about detailed waveforms.
+        }
+
+        @Override
+        public void detailChanged(WaveformDetailUpdate update) {
+            if (update.player == player) {
+                reportPosition(null);
+            }
+        }
+    };
+
+    /**
      * Constructor sets up and describes the inlets, outlets, and attributes, and registers our listeners.
      */
     public Position() {
@@ -112,7 +131,8 @@ public class Position extends MaxObject {
         });
         declareAttribute("player", null, "setPlayer");
 
-        TimeFinder.getInstance().addTrackPositionListener(player, this::reportPosition);
+        TimeFinder.getInstance().addTrackPositionListener(player, trackPositionListener);
+        WaveformFinder.getInstance().addWaveformListener(waveformListener);
     }
 
     @Override
@@ -126,7 +146,8 @@ public class Position extends MaxObject {
 
     @Override
     protected void notifyDeleted() {
-        TimeFinder.getInstance().removeTrackPositionListener(this::reportPosition);
+        TimeFinder.getInstance().removeTrackPositionListener(trackPositionListener);
+        WaveformFinder.getInstance().removeWaveformListener(waveformListener);
         super.notifyDeleted();
     }
 }

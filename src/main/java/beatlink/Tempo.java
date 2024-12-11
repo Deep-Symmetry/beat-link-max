@@ -136,7 +136,7 @@ public class Tempo extends MaxObject {
     };
 
     /**
-     * Constructor sets up and describes the inlets, outlets, and attributes, and registers our listeners.
+     * Sets up and describes the inlets, outlets, and attributes, and registers our listeners.
      */
     public Tempo() {
         declareInlets(new int[]{DataTypes.ALL});

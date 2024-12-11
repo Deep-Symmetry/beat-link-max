@@ -80,7 +80,7 @@ public class Connect extends MaxObject {
     };
 
     /**
-     * Constructor sets up and describes the inlets and outlets, and registers our listeners.
+     * Sets up and describes the inlets and outlets, and registers our listeners.
      */
     public Connect() {
         Util.initializeLogging();

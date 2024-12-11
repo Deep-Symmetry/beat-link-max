@@ -28,6 +28,7 @@ own ideas.
 The beat-link-max package provides a number of objects for interacting with Beat Link.
 
 > To be written!
+> TODO: Player status object, track info object, cues object? Doc files and help patchers.
 
 ## Installation
 

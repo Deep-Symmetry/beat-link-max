@@ -34,8 +34,9 @@ public class Master extends MaxObject {
      * Configures our single outlet and registers our listener.
      */
     public Master() {
-        declareInlets(new int[] {});
-        declareOutlets(new int[]{DataTypes.INT});
+        declareInlets(new int[] {DataTypes.ALL});
+        setInletAssist(new String[] {"bang to report current master player"});
+        declareOutlets(new int[] {DataTypes.INT});
         setOutletAssist(new String[] {"master player number, or 0 if none"});
         createInfoOutlet(false);
         VirtualCdj.getInstance().addMasterListener(listener);
@@ -45,6 +46,15 @@ public class Master extends MaxObject {
     protected void notifyDeleted() {
         VirtualCdj.getInstance().removeMasterListener(listener);
         super.notifyDeleted();
+    }
+
+    @Override
+    protected void bang() {
+        DeviceUpdate masterUpdate = null;
+        if (VirtualCdj.getInstance().isRunning()) {
+            masterUpdate = VirtualCdj.getInstance().getTempoMaster();
+        }
+        listener.masterChanged(masterUpdate);
     }
 
     @Override

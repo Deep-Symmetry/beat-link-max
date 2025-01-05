@@ -1,6 +1,7 @@
 package beatlink;
 
 import com.cycling74.max.MaxObject;
+import org.deepsymmetry.beatlink.data.SearchableItem;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -27,6 +28,10 @@ public class Util {
      */
     private static final AtomicBoolean isLoggingInitialized = new AtomicBoolean(false);
 
+    /**
+     * Make sure that the logging environment has been properly established. Does nothing
+     * if another caller has already requested this.
+     */
     public static synchronized void initializeLogging() {
         if (!isLoggingInitialized.get()) {
             // Configure logging here:
@@ -62,5 +67,18 @@ public class Util {
             }
             isLoggingInitialized.set(true);
         }
+    }
+
+    /**
+     * Gets the label of a {@link SearchableItem}, safely returning an empty string if the item was null.
+     *
+     * @param item the searchable item whose label is desired
+     * @return the label of the item, or an empty string if the item was null
+     */
+    public static String labelIfNotNull(SearchableItem item) {
+        if (item == null) {
+            return "";
+        }
+        return item.label;
     }
 }

@@ -119,6 +119,7 @@ public class Position extends MaxObject {
     /**
      * Sets up and describes the inlets, outlets, and attributes, and registers our listeners.
      */
+    @API(status = API.Status.EXPERIMENTAL)
     public Position() {
         declareInlets(new int[]{DataTypes.ALL});
         setInletAssist(new String[] {"bang to query current position"});

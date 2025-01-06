@@ -81,4 +81,17 @@ public class Util {
         }
         return item.label;
     }
+
+    /**
+     * Returns a string unchanged unless it is {@code null}, in which case an empty string is returned instead.
+     *
+     * @param s the possibly-null string
+     * @return a non-null string
+     */
+    public static String stringIfNotNull(String s) {
+        if (s == null) {
+            return "";
+        }
+        return s;
+    }
 }

@@ -35,7 +35,12 @@ public class Metadata extends MaxObject {
         } else {
             outlet(0, new Atom[]{
                     Atom.newAtom(metadata.getTitle()),
-                    Atom.newAtom(Util.labelIfNotNull(metadata.getArtist()))
+                    Atom.newAtom(Util.labelIfNotNull(metadata.getArtist())),
+                    Atom.newAtom(Util.labelIfNotNull(metadata.getAlbum())),
+                    Atom.newAtom(Util.stringIfNotNull(metadata.getComment())),
+                    Atom.newAtom(Util.labelIfNotNull(metadata.getGenre())),
+                    Atom.newAtom(metadata.getTempo() / 100.0),
+                    Atom.newAtom(metadata.getDuration())
             });
         }
     }
